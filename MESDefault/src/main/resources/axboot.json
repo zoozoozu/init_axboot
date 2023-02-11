@@ -1,0 +1,24 @@
+{
+  "title": "Axboot :: Advanced Web Application",
+  "copyrights": "Axboot 1.0.0 - Web Application Framework © 2022",
+  "logo": {
+    "header": "/assets/images/header-logo_org.png",
+    "login": "/assets/images/logo.png",
+    "logo": "/assets/images/logo.png"
+  },
+  "background": {
+   "login": "/assets/images/login-bg.jpg"
+  },
+  "layout": {
+    "leftSideMenu": "visible"
+  },
+  "sessionCookie": "4cf2b799-8461-4f71-afbe-5d97d6bcb63b",
+  "extendedCss": [
+    "/assets/css/axboot.css"
+  ],
+  "extendedCssforIE9": [
+    "/assets/css/axboot-01.css",
+    "/assets/css/axboot-02.css",
+    "/assets/css/axboot-03.css"
+  ]
+}

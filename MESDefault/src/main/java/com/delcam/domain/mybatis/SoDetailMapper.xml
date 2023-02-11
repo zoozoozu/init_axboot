@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.delcam.domain.mybatis.SoDetailMapper">
+ 	   <select id="getShippingTargetList" resultType="HashMap"   parameterType="HashMap"   statementType="PREPARED"> 
+	   		<![CDATA[
+	   			  SELECT
+							  SO.SO_ID            	 soId        
+							, SO.SO_NAME          	 soName      
+							, SO.CUST_ID             custId         
+							, SO.SO_REQ_DATE         soReqDate        
+							, DTL.SO_DTL_ID          soDtlId       
+							, DTL.ITEM_ID            itemId
+							, DTL.SO_QTY			 soQty
+							, ITEM.ITEM_NAME 		 itemName
+							, ITEM.ITEM_REV  		 itemRev
+							, ITEM.ITEM_CD 			 itemCd
+							, CUST.CUST_NAME 		 custName
+							, REPO.REPO_QTY 		 repoQty
+						 FROM TB_SO_MST SO
+						 LEFT JOIN TB_SO_DTL DTL ON SO.SO_ID = DTL.SO_ID
+						 LEFT JOIN TB_REPO_MST REPO ON DTL.ITEM_ID = REPO.ITEM_ID
+						 LEFT JOIN TB_ITEM ITEM ON ITEM.ITEM_ID  = REPO.ITEM_ID
+						 LEFT JOIN TB_CUST CUST ON CUST.CUST_ID = SO.CUST_ID 
+						 WHERE   1 = 1 ]]>
+						 
+						 <if test="soId != null ">
+			        		<![CDATA[  AND SO.SO_ID  = #{soId} ]]>	
+			             </if>
+	   </select>
+</mapper>

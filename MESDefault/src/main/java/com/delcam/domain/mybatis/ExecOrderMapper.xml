@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.delcam.domain.mybatis.ExecOrderMapper">
+ 	   <select id="execOrderTargetList" resultType="HashMap"   parameterType="HashMap"   statementType="PREPARED"> 
+    			 <![CDATA[  
+    					WITH EXE_ORDER AS (
+							SELECT 
+										  EXE.EO_STATUS          
+										, EXE.EXEC_ID              
+										, EXE.PROC_GRP_ID          
+										, EXE.REQ_EXE_QTY          
+										, EXE.SO_DTL_ID            
+										, PMAP.PROC_ID             
+										, PMAP.PROC_ORDER          
+										, PROC.PROC_NAME           
+										, PROC.PROC_TYPE           
+										, PROC.WORK_TIME      
+							FROM                                      
+										  MES.TB_EXE_MST EXE 
+										, MES.TB_PROC_MAP PMAP 
+										, MES.TB_PROC PROC
+							WHERE 
+									    EXE.PROC_GRP_ID = PMAP.PROC_GRP_ID 
+									AND PMAP.PROC_ID = PROC.PROC_ID  
+									AND PMAP.IS_SELECT = 'Y'
+									AND EXE.EXEC_ID =  #{execId} 
+						)
+						SELECT 
+						      ORD.EO_STATUS        eoStatus       
+							, ORD.EXEC_ID            execId        
+							, ORD.PROC_GRP_ID        procGrpId     
+							, ORD.REQ_EXE_QTY        reqExeQty     
+							, ORD.SO_DTL_ID          soDtlId       
+							, ORD.PROC_ID            procId       
+							, ORD.PROC_ORDER         procOrder    
+							, ORD.PROC_NAME          procName     
+							, ORD.PROC_TYPE          procType     
+							, SUM(ORD.WORK_TIME)          workTime   
+						    , SUM(RST.EXE_QTY_BAD)  qtyBad, SUM(RST.EXE_QTY_GOOD) qtyGood, SUM(RST.EXE_QTY_IN) qtyIn
+						FROM EXE_ORDER ORD LEFT OUTER JOIN TB_EXE_RESULT RST 
+						ON ORD.EXEC_ID = RST.EXEC_ID AND ORD.PROC_ID = RST.PROC_ID 
+						GROUP BY 
+						      ORD.EO_STATUS          
+							, ORD.EXEC_ID              
+							, ORD.PROC_GRP_ID          
+							, ORD.REQ_EXE_QTY          
+							, ORD.SO_DTL_ID            
+							, ORD.PROC_ID             
+							, ORD.PROC_ORDER          
+							, ORD.PROC_NAME           
+							, ORD.PROC_TYPE           
+						ORDER BY ORD.PROC_ORDER ASC
+    			 /*
+  				   SELECT 
+								  EXE.EO_STATUS         eoStatus      
+								, EXE.EXEC_ID           execId          
+								, EXE.PROC_GRP_ID       procGrpId       
+								, EXE.REQ_EXE_QTY       reqExeQty       
+								, EXE.SO_DTL_ID         soDtlId         
+								, PMAP.PROC_ID          procId          
+								, PMAP.PROC_ORDER       procOrder       
+								, PROC.PROC_NAME        procName        
+								, PROC.PROC_TYPE        procType        
+								, PROC.WORK_TIME        workTime   
+					FROM                                      
+								  MES.TB_EXE_MST EXE 
+								, MES.TB_PROC_MAP PMAP 
+								, MES.TB_PROC PROC
+					WHERE 
+							    EXE.PROC_GRP_ID = PMAP.PROC_GRP_ID 
+							AND PMAP.PROC_ID = PROC.PROC_ID  
+							AND EXE.EXEC_ID =     'EX_00000002'   
+					ORDER BY PROC_ORDER ASC  */
+					 
+                  ]]> 
+        </select>
+ </mapper>
